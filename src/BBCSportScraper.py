@@ -20,13 +20,11 @@ class Scraper:
         time.sleep(1)
         content = self.browser.page_source
         soup = BeautifulSoup(content, features='html.parser')
-        # print("link found")
         self.browser.close()
         return soup
 
     def get_match_blocks(self, soup):
         match_blocks = soup.find_all('div', class_='qa-match-block')
-        # print(match_blocks)
         return match_blocks
 
     def identify_block(self, all_blocks, league):
@@ -47,7 +45,8 @@ class Scraper:
         away_team = []
         home_score = []
         away_score = []
-        time = []
+        times = []
+        time_list = []
 
         for match in matches:
             """
@@ -65,6 +64,12 @@ class Scraper:
             away_scores.append(match.find_all('span',
                                               class_="sp-c-fixture__number sp-c-fixture__number--away sp-c-fixture__number--live-sport"))
 
+            """
+            Time
+            """
+            time = match.find_all('span', class_="sp-c-fixture__status gel-brevier sp-c-fixture__status--live-sport")
+            times.append(time)
+
         # Names
         for x in range(len(team_names)):
             home_team.append(team_names[x][0].text)
@@ -79,10 +84,15 @@ class Scraper:
         for x in range(len(away_scores)):
             away_score.append(away_scores[x][0].text)
 
+        # Time
+        for x in range(len(times)):
+            time_list.append(times[x][0].text)
+
         # print(home_team)
         # print(home_score)
-        # print(away_team)
+        # print(time_list)
         # print(away_score)
+        # print(away_team)
 
 
 s = Scraper()
@@ -91,4 +101,3 @@ blocks = s.get_match_blocks(s1)
 prem_block = s.identify_block(blocks, "Scottish Premiership")
 matches = s.find_all_matches(prem_block)
 s.get_scores(matches)
-

@@ -1,0 +1,5 @@
+*.cfg
+/venv/bin/
+/venv/include/
+/venv/lib/
+

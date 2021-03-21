@@ -32,7 +32,6 @@ class Scraper:
     def identify_block(self, all_blocks, league):
         for block in all_blocks:
             if block.h3.text.strip() == league:
-                # print(block.h3.text.strip())
                 self.block = block
         return self.block
 
@@ -41,40 +40,55 @@ class Scraper:
         return self.matches
 
     def get_scores(self, matches):
+        team_names = []
+        home_scores = []
+        away_scores = []
         home_team = []
         away_team = []
         home_score = []
         away_score = []
         time = []
-        team_names = []
+
         for match in matches:
-            # home team
+            """
+            Names
+            """
             team_name = match.find_all('span',
                                        class_="gs-u-display-none gs-u-display-block@m qa-full-team-name sp-c-fixture__team-name-trunc")
             team_names.append(team_name)
 
-        # Match 1
+            """
+            Scores
+            """
+            home_scores.append(match.find_all('span',
+                                              class_="sp-c-fixture__number sp-c-fixture__number--home sp-c-fixture__number--live-sport"))
+            away_scores.append(match.find_all('span',
+                                              class_="sp-c-fixture__number sp-c-fixture__number--away sp-c-fixture__number--live-sport"))
+
+        # Names
+        for x in range(len(team_names)):
+            home_team.append(team_names[x][0].text)
+            away_team.append(team_names[x][1].text)
+
+        # Scores
         # Home
-        print(team_names[0][0].text)
+        for x in range(len(home_scores)):
+            home_score.append(home_scores[x][0].text)
+
         # Away
-        print(team_names[0][1].text)
+        for x in range(len(away_scores)):
+            away_score.append(away_scores[x][0].text)
 
-        # Match 2
-        # Home
-        print(team_names[1][0].text)
-        # Away
-        print(team_names[1][1].text)
+        # print(home_team)
+        # print(home_score)
+        # print(away_team)
+        # print(away_score)
 
-
-        """
-        Run this code - will see that team_names is a list, which I need to iterate through and take the text from each
-        team_names[0] is home, team_names[1] is away
-        Then, append these to the home_team and away_team lists
-        """
 
 s = Scraper()
 s1 = s.open_pages()
 blocks = s.get_match_blocks(s1)
-prem_block = s.identify_block(blocks, "Russian Premier League")
+prem_block = s.identify_block(blocks, "Scottish Premiership")
 matches = s.find_all_matches(prem_block)
 s.get_scores(matches)
+

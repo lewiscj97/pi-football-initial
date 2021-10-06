@@ -138,4 +138,4 @@ def main(league):
     s.print_results()
 
 
-main("Premier League")
+main("Turkish Super Lig")

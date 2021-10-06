@@ -2,22 +2,22 @@
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
-import pandas as pd
-import datetime
 import time
 
 
 class Scraper:
+
     def __init__(self):
         self.link = "https://www.bbc.co.uk/sport/football/scores-fixtures"
+        # self.browser = webdriver.PhantomJS('/Users/lewisjones/PycharmProjects/Bits/phantomjs')
         self.browser = webdriver.Chrome('/Users/lewisjones/PycharmProjects/Bits/chromedriver')
         self.block = ""
         self.matches = []
-        self.home_team = []
-        self.away_team = []
-        self.home_score = []
-        self.away_score = []
-        self.time_list = []
+        # self.home_team = []
+        # self.away_team = []
+        # self.home_score = []
+        # self.away_score = []
+        # self.time_list = []
 
     def open_pages(self):
         self.browser.get(self.link)
@@ -59,9 +59,6 @@ class Scraper:
             self.home_team.append(team_names[x][0].text)
             self.away_team.append(team_names[x][1].text)
 
-        # print(home_team)
-        # print(away_team)
-
     def get_scores(self, matches):
         home_scores = []
         away_scores = []
@@ -96,10 +93,6 @@ class Scraper:
         for x in range(len(away_scores)):
             self.away_score.append(away_scores[x][0].text)
 
-        # print(home_score)
-        # print(away_score)
-        # print(yet_to_start)
-
     def get_times(self, matches):
         times = []
 
@@ -117,8 +110,6 @@ class Scraper:
         for time in times:
             self.time_list.append(time[0].text)
 
-        # print(time_list)
-
     def print_results(self):
         for x in range(len(self.home_team)):
             print(f"{self.home_team[x]:>17} {self.home_score[x]} - {self.away_score[x]} {self.away_team[x]:17}\n"
@@ -132,10 +123,11 @@ def main(league):
     blocks = s.get_match_blocks(s1)
     league_block = s.identify_block(blocks, league)
     matches = s.find_all_matches(league_block)
-    s.get_team_names(matches)
-    s.get_scores(matches)
-    s.get_times(matches)
-    s.print_results()
+    print(matches)
+    # s.get_team_names(matches)
+    # s.get_scores(matches)
+    # s.get_times(matches)
+    # s.print_results()
 
 
-main("Turkish Super Lig")
+main("UEFA Nations League")
